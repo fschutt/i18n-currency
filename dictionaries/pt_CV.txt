@@ -4,13 +4,8 @@ pt_CV{
     %%Parent{"pt_PT"}
     Currencies{
         CVE{
-            "​",
+            "​CVE",
             "escudo cabo-verdiano",
-            {
-                "#,##0.00 ¤",
-                "$",
-                " ",
-            }
         }
         PTE{
             "​PTE",

@@ -365,11 +365,6 @@ ca{
         ESP{
             "₧",
             "pesseta espanyola",
-            {
-                "¤ #,##0.00",
-                ",",
-                ".",
-            }
         }
         ETB{
             "ETB",

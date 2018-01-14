@@ -461,11 +461,6 @@ it{
         ITL{
             "ITL",
             "lira italiana",
-            {
-                "¤ #,##0.00",
-                ",",
-                ".",
-            }
         }
         JMD{
             "JMD",

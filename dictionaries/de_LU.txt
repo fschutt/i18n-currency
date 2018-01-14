@@ -5,11 +5,6 @@ de_LU{
         LUF{
             "F",
             "Luxemburgischer Franc",
-            {
-                "#,##0.00 ¤",
-                ".",
-                ",",
-            }
         }
     }
     Version{"2.1.31.33"}

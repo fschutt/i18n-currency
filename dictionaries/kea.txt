@@ -87,13 +87,8 @@ kea{
             "Iuan xines",
         }
         CVE{
-            "​",
+            "​CVE",
             "Skudu Kabuverdianu",
-            {
-                "#,##0.00 ¤",
-                "$",
-                " ",
-            }
         }
         CZK{
             "CZK",
