@@ -36,7 +36,7 @@ fn main() {
     	let mut read_str = String::new();
     	let mut file = fs::File::open(path.canonicalize().unwrap()).unwrap();
     	file.read_to_string(&mut read_str).expect(&format!("no valid unicode for input file: {:?}", file_name));
-    	if let Some(dict) = parse_makefile(&read_str, &file_name) {
+    	if let Some(dict) = parse_makefile(&read_str) {
     		dictionaries.insert((first_item.to_string(), second_item), dict);
     	}
     }
@@ -75,8 +75,7 @@ fn main() {
     lib_rs.write_all(&lib_rs_contents.as_bytes()).unwrap();
 }
 
-fn parse_makefile(input: &str, file_name_debug: &str) -> Option<LanguageDictionary> {
-	println!("parsing file: {:?}", file_name_debug);
+fn parse_makefile(input: &str) -> Option<LanguageDictionary> {
 	let mut currencies = HashMap::new();
 
 	// stores the indents, like "af", "Currency", "one"
@@ -102,11 +101,41 @@ fn parse_makefile(input: &str, file_name_debug: &str) -> Option<LanguageDictiona
 				'{' => {
 					// push stack
 					cur_indent_lv += 1;
-					indent_stack.push(cur_read_buf[0].clone());
+					indent_stack.push(cur_read_buf.pop().unwrap());
 					cur_read_buf = vec![String::new()];
 				},
 				'}' => {
+
 					// pop stack, decide action
+					let mut is_match = false;
+					if let Some(indent) = indent_stack.get(cur_indent_lv - 1) {
+						match indent.as_ref() {
+							"Currencies" => {
+								is_match = true;
+							},
+							"Currencies%narrow" => {
+								is_match = true;
+							},
+							"Currencies%variant" => {
+								is_match = true;
+							},
+							"CurrencyPlurals" => {
+								is_match = true;
+							},
+							"CurrencyUnitPatterns" => {
+								is_match = true;
+							},
+							_ => { }
+						}
+
+						println!("indent - {:?}", indent);
+					}
+
+					if is_match {
+						let indent_stack_trunc = indent_stack.len().saturating_sub(cur_indent_lv);
+						indent_stack.truncate(indent_stack_trunc);
+					}
+
 					item_enum = 0;
 					cur_indent_lv -= 1;
 				},
@@ -121,6 +150,8 @@ fn parse_makefile(input: &str, file_name_debug: &str) -> Option<LanguageDictiona
 		}
 	}
 
+	// println!("indent_stack - {:#?}", indent_stack);
+
 	if currencies.is_empty() {
 		None
 	} else {
@@ -129,24 +160,3 @@ fn parse_makefile(input: &str, file_name_debug: &str) -> Option<LanguageDictiona
 		})
 	}
 }
-
-/*if let Some(indent) = indent_stack.get(cur_indent_lv - 1) {
-	match indent.as_ref() {
-		"Currencies" => {
-
-		},
-		"Currencies%narrow" => {
-
-		},
-		"Currencies%variant" => {
-
-		},
-		"CurrencyPlurals" => {
-
-		},
-		"CurrencyUnitPatterns" => {
-
-		},
-		_ => { }
-	}
-}*/
